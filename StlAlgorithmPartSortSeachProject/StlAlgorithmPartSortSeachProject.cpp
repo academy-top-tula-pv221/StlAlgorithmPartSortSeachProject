@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 using namespace std;
 
@@ -33,6 +34,18 @@ void quickSort(Iterator begin, Iterator end)
     auto it2 = partition(it1, end, [pivot](auto item) { return item <= pivot; });
     quickSort(begin, it1);
     quickSort(it2, end);
+}
+
+template <class Iterator>
+void heapSort(Iterator begin, Iterator end)
+{
+    make_heap(begin, end);
+    while (end != begin)
+    {
+        end--;
+        swap(*begin, *end);
+        make_heap(begin, end);
+    }
 }
 
 struct UserNameComparer
@@ -109,7 +122,7 @@ int main()
     //for (User user : users)
     //    cout << user << "\n";
     //cout << "\n";
-
+    /*
     vector<int> v1{ 1, 2 ,3, 4, 5, 6, 7 };
     vector<int> v2{ 5, 6, 7, 8, 9, 10, 11 };
     vector<int> v3{ 3, 4, 5, 9 };
@@ -143,5 +156,27 @@ int main()
     set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), back_inserter(v4));
     copy(v4.begin(), v4.end(), ostream_iterator<int>(cout, " "));
     cout << "\n";
+    */
 
+    srand(time(nullptr));
+    vector<int> heap(10);
+    generate(heap.begin(), heap.end(), []() { return rand() % 100; });
+
+    copy(heap.begin(), heap.end(), ostream_iterator<int>(cout, " "));
+    cout << "\n";
+    //cout << boolalpha << is_heap(heap.begin(), heap.end()) << "\n";
+    ////cout << *is_heap_until(heap.begin(), heap.end()) << "\n";
+    //make_heap(heap.begin(), heap.end());
+    //copy(heap.begin(), heap.end(), ostream_iterator<int>(cout, " "));
+    //cout << "\n";
+
+    heapSort(heap.begin(), heap.end());
+    copy(heap.begin(), heap.end(), ostream_iterator<int>(cout, " "));
+    cout << "\n";
+
+
+    vector<int> vacc{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    cout << accumulate(vacc.begin(), vacc.end(), 0) << "\n";
+    cout << accumulate(vacc.begin(), vacc.end(), 0, 
+        [](auto acc, auto item) { return acc += item * item; }) << "\n";
 }
